@@ -1,7 +1,6 @@
 package service
 
 import (
-	"database/sql"
 	"fmt"
 	"time"
 
@@ -20,8 +19,8 @@ const (
 	MaxIdleConns int    = 10
 )
 
-func Context() *sql.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb&parseTime=True", UserName, Password, Address, Port, Database)
+func Context() *gorm.DB {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True", UserName, Password, Address, Port, Database)
 
 	conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
@@ -38,5 +37,5 @@ func Context() *sql.DB {
 	context.SetMaxIdleConns(MaxIdleConns)
 	context.SetMaxOpenConns(MaxOpenConns)
 
-	return context
+	return conn
 }

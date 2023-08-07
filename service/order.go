@@ -7,8 +7,12 @@ type OrderHeader struct {
 	Address  int
 }
 
-func OrderList() OrderHeader {
-	res := OrderHeader{}
+func OrderList() *[]OrderHeader {
+	orders := &[]OrderHeader{}
 
-	return res
+	db := Context()
+
+	db.Table("OrderHeader").Find(&orders)
+
+	return orders
 }
