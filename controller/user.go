@@ -14,3 +14,11 @@ func GetOrder(c *gin.Context) {
 		"data": service.OrderList(),
 	})
 }
+
+func CreateOrder(c *gin.Context) {
+
+	c.JSON(200, gin.H{
+		"data":    nil,
+		"message": "OK",
+	})
+}
