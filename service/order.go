@@ -1,29 +1,58 @@
 package service
 
+import (
+	"fmt"
+)
+
 type OrderHeader struct {
-	OHId     int         `gorm:"type:INT;autoIncrement:true;primaryKey"`
-	UserName string      `gorm:"type:VARCHAR(100)"`
-	Phone    string      `gorm:"type:VARCHAR(10)"`
-	Address  int         `gorm:"type:INT"`
-	Bodys    []OrderBody `gorm:"foreignKey:OHId;references:OHId"`
+	OrderHeaderID int         `gorm:"column:OHId;type:INT;autoIncrement:true;primaryKey"`
+	UserName      string      `gorm:"type:VARCHAR(100)"`
+	Phone         string      `gorm:"type:VARCHAR(10)"`
+	Address       int         `gorm:"type:INT"`
+	OrderBodys    []OrderBody `gorm:"foreignKey:OrderHeaderID"`
 }
 
 type OrderBody struct {
-	OBId     int         `gorm:"type:INT;autoIncrement:true;primaryKey"`
-	PId      int         `gorm:"type:INT"`
-	Quantity int         `gorm:"type:INT"`
-	OHId     int         `gorm:"type:INT"`
-	Header   OrderHeader `gorm:"foreignKey:OHId"`
+	OrderBodyID   int `gorm:"column:OBId;type:INT;autoIncrement:true;primaryKey"`
+	ProductID     int `gorm:"column:PId;type:INT"`
+	Quantity      int `gorm:"type:INT"`
+	OrderHeaderID int `gorm:"column:OHId;type:INT"`
+}
+
+func (*OrderBody) TableName() string {
+	return "OrderBody"
+}
+
+func (*OrderHeader) TableName() string {
+	return "OrderHeader"
 }
 
 func OrderList() *[]OrderHeader {
-	orders := &[]OrderHeader{}
+	var orders []OrderHeader
 
 	db := Context()
 
-	db.Table("OrderHeader").Find(&orders)
+	err := db.Preload("OrderBodys").Find(&orders).Error
 
-	return orders
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return &orders
+}
+
+func OrderOne(id int) *OrderHeader {
+	var order OrderHeader
+
+	db := Context()
+
+	err := db.Preload("OrderBodys").First(&order, id).Error
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return &order
 }
 
 func Create(model *OrderHeader) bool {
