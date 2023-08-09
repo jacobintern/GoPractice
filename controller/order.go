@@ -7,20 +7,23 @@ import (
 	"github.com/jacobintern/GoPractice/service"
 )
 
-func GetUserOrder(c *gin.Context) {
-
-}
+// func GetOrderByUser(c *gin.Context) {
+// 	name, _ := strconv.Atoi(c.Param("name"))
+// 	c.JSON(200, gin.H{
+// 		"data": service.GetOrderList(id),
+// 	})
+// }
 
 func GetOrder(c *gin.Context) {
 	c.JSON(200, gin.H{
-		"data": service.OrderList(),
+		"data": service.GetOrderList(),
 	})
 }
 
-func GetOne(c *gin.Context) {
+func GetOrderById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	c.JSON(200, gin.H{
-		"data": service.OrderOne(id),
+		"data": service.GetOrder(id),
 	})
 }
 

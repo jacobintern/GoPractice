@@ -27,7 +27,7 @@ func (*OrderHeader) TableName() string {
 	return "OrderHeader"
 }
 
-func OrderList() *[]OrderHeader {
+func GetOrderList() *[]OrderHeader {
 	var orders []OrderHeader
 
 	db := Context()
@@ -41,7 +41,11 @@ func OrderList() *[]OrderHeader {
 	return &orders
 }
 
-func OrderOne(id int) *OrderHeader {
+type IOrder interface {
+	GetOrder()
+}
+
+func GetOrder(id int) *OrderHeader {
 	var order OrderHeader
 
 	db := Context()
@@ -54,6 +58,20 @@ func OrderOne(id int) *OrderHeader {
 
 	return &order
 }
+
+// func GetOrder(name string) *OrderHeader {
+// 	var order OrderHeader
+
+// 	db := Context()
+
+// 	err := db.Preload("OrderBodys").First(&order, name).Error
+
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+
+// 	return &order
+// }
 
 func Create(model *OrderHeader) bool {
 
