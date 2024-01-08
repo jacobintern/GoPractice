@@ -10,6 +10,7 @@ func main() {
 
 	app.GET("/api/orders", controller.GetOrder)
 	app.GET("/api/order/:id", controller.GetOrderById)
+	app.GET("/api/match", controller.MatchList)
 	// app.GET("/api/order/:name", controller.GetOrderByUser)
 
 	app.Run(":5001")
